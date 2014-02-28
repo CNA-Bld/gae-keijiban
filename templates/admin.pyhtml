@@ -1,0 +1,20 @@
+<?py #@ARGS categories ?>
+
+<form method="POST" action="/admin/?do=create_category">
+    Create Category
+    Name: <input type="text" name="name"/>
+    Order: <input type="text" name="order"/>
+    <input type="submit" value="Submit"/>
+</form>
+
+<form method="POST" action="/admin/?do=create_forum">
+    Create Forum
+    Title: <input type="text" name="title"/>
+    Order: <input type="text" name="order"/>
+    Category: <select name="category" id="category">
+    <?py for category in categories: ?>
+        <option value="${category.key.urlsafe()}">${category.name}</option>
+    <?py #endfor ?>
+    </select>
+    <input type="submit" value="Submit"/>
+</form>

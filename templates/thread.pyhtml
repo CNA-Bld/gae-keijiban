@@ -1,0 +1,51 @@
+<?py #@ARGS forum, forum_description, forum_locked, post, admin, page_number, max_page_number, _ ?>
+
+
+<p align="right">
+    [<a href="/f/${forum}">${{_('Forum Index')}}</a>]
+</p>
+
+<p align="center">
+    <font color="#800000" size="5"><b><span>No.${post['id']} - ${post['title'] or _('No Title')} - ${forum}</span></b></font>
+</p>
+
+<?py if forum_locked: ?>
+    <div style="color: Red;">*${{_('This forum has been locked')}}</div>
+<?py else: ?>
+    <?py include('_form.pyhtml', form_action='/reply/?forum='+forum+'&id='+post['id'], foot_description=forum_description, _=_) ?>
+<?py #endif ?>
+
+<p></p>
+
+
+<?py include('_post.pyhtml', post=post, forum=forum, admin=admin, _=_) ?>
+
+
+
+<table align="left" border="1">
+    <tbody>
+    <tr>
+        <td>
+            <a href="?pn=1">${{_('First Page')}}</a>
+        </td>
+        <td>
+            <?py for i in range(max(1,page_number-4),page_number): ?>
+            [<a href="?pn=${i}">${i}</a>]
+            <?py #endfor ?>
+            [<b>${page_number}</b>]
+            <?py for i in range(page_number+1, min(max_page_number+1, page_number+5)): ?>
+            [<a href="?pn=${i}">${i}</a>]
+            <?py #endfor ?>
+        </td>
+        <?py if (page_number+1)<=max_page_number: ?>
+        <td>
+            <a href="?pn=${page_number+1}">${{_('Next Page')}}</a>
+        </td>
+        <?py #endif ?>
+    </tr>
+    </tbody>
+</table>
+
+<br clear="all">
+
+<script src="/static/scripts/script.js" type="text/javascript"></script>

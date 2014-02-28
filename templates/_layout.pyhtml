@@ -1,0 +1,96 @@
+<?py #@ARGS _content, page_title, site_title, forums, footer_info, version_info, langs, _ ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <title>${site_title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <style type="text/css">
+        body, tr, td, th {
+            font-size: 12pt;
+            word-break: break-all;
+        }
+
+        a:hover {
+            color: #DD0000;
+        }
+
+        span {
+            font-size: 20pt;
+        }
+
+        small {
+            font-size: 10pt;
+        }
+
+        .r {
+            text-decoration: none;
+        }
+
+        .report {
+            font-size: 12px;
+        }
+
+        #refView {
+            border: 1px solid white;
+            position: absolute;
+        }
+
+        #refView td {
+            background: rgb(240, 194, 168);
+        }
+    </style>
+</head>
+
+<body bgcolor="#FFFFEE" text="#800000" style="margin: 0;">
+<div id="menu"
+     style="position: fixed; margin: 0px; padding: 0px 10px 10px; left: 0px; top: 0px; color: #cc0000; background-color: #ffffff; border-right: 1px black solid; overflow: auto; width: 125px;">
+
+        <div style="text-align: center; margin-bottom: 10px;">
+            <font size="4"><a href="/" target="_top">${site_title}</a></font>
+        </div>
+
+        <font size="2">
+            <?py for forum_category in forums: ?>
+                <b> ${forum_category['name']} </b><br/>
+                <?py for forum in forum_category['forums']: ?>
+                    <a href="/f/${forum}">${forum}</a><br/>
+                <?py #endfor ?>
+                <br/>
+            <?py #endfor ?>
+
+            <b>${{_('Admin')}}</b><br/>
+                <a href="/admin/">${{_('Admin')}}</a><br/>
+            <br/>
+        </font>
+
+        <form action="" method="get">
+            <select name="lang" id="lang" onchange="this.form.submit()">
+                <option value="">Language</option>
+                <?py for lang in langs: ?>
+                    <option value="${lang['code']}">${lang['name']}</option>
+                <?py #endfor ?>
+            </select>
+        </form>
+    </div>
+</div>
+
+    <div id="refView"></div>
+
+    <div id="right_content" style="margin: auto auto 50px 160px;">
+        {== _content ==}
+    </div>
+
+    <div style="position: fixed; margin-bottom: 0px; padding: 5px; width: 100%; left: 0px; bottom: 0px; color: #cc0000; background-color: #ffffee; border-top: 1px black solid; ">
+        <small>
+            #{footer_info}
+            <br/>
+            ${version_info}
+        </small>
+    </div>
+</body>
+</html>

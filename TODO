@@ -1,0 +1,35 @@
+*) Priority: High
+   实现管理员 UI（站点设置面板、锁定/SAGE/删串/封 IP）
+   Implement interface for admins (site settings and links to lock/sage/delete posts and ban users)
+
+*) Priority: High
+   实现「点击 No 回复」功能
+   Implement 'Click No. to reply to' feature on user interface (Javascript)
+
+*) Priority: High
+   自动高亮 >> 和 > 后信息
+   Auto highlight infomation after >> and >
+
+*) Priority: Medium
+   图片附件
+   Image attachment feature
+
+*) Priority: Medium
+   在所有页面上启用 Memcache
+   Build memcache on all pages
+
+*) Priority: Medium
+   重构错误/异常处理机制
+   Refactor handling for errors/exceptions
+
+*) Priority: Medium
+   2chトリップ功能
+   2ch drip feature
+
+*) Priority: Low
+   鼠标悬停于 >> No. 上时显示原文
+   Display quoted post when mouseover >> No. (Ajax)
+
+*) Priority: Low
+   搜索功能
+   Search feature

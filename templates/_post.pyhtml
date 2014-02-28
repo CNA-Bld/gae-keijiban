@@ -1,0 +1,56 @@
+<?py #@ARGS post, admin, forum, is_forum_page,  _ ?>
+
+<hr>
+
+<?py if post['attached_img']: ?>
+    <a href="${post['attached_img']}" target="_blank"><img src="${post['attached_img']}" border="0" align="left" hspace="20"></a>
+<?py #endif ?>
+<font color="#cc1105" size="+1"><b>${post['title'] or _('No Title')}</b></font>
+<font color="#117743"><b>${post['po_name'] or _('Anonymous')}</b></font>
+${post['date']} ID:${post['po_id']}
+<?py if is_forum_page: ?>
+    <a class="r" href="/t/${forum}/${post['id']}?r=${post['id']}">No.${post['id']}</a>
+    [<a href="/t/${forum}/${post['id']}">${{_('Reply')}}</a>]
+<?py else: ?>
+    <a class="r" href="#">No.${post['id']}</a>
+<?py #endif ?>
+<br>
+<blockquote class="threadpost">
+    <?py if post['force_saged']: ?>
+        <div style="color: Red">*${{_('This post has been force SAGEd')}}</div>
+    <?py #endif ?>
+    <?py if post['locked']: ?>
+        <div style="color: Red">*${{_('This post has been locked')}}</div>
+    <?py #endif ?>
+    #{post['content'] or _('No Content')}
+</blockquote>
+
+<?py if post['hidden_replies']>0: ?>
+    <font color="#707070">${_('There are %d replies not displaying. Please click Reply link to view all replies.') % post['hidden_replies']}</font>
+<?py #endif ?>
+
+<?py for reply in post['replies']: ?>
+    <table id="${reply['id']}" border="0">
+        <tbody>
+            <tr>
+                <td nowrap="" align="right" valign="top">…</td>
+                <td bgcolor="#F0E0D6">
+                    <?py if reply['attached_img']: ?>
+                        <a href="${reply['attached_img']}" target="_blank"><img src="${reply['attached_img']}" border="0" align="left" hspace="20"></a>
+                    <?py #endif ?>
+                    <font color="#cc1105" size="+1"><b>${reply['title'] or _('No Title')}</b></font>
+                    <font color="#117743"><b>${reply['po_name'] or _('Anonymous')}</b></font>
+                    ${reply['date']} ID:${reply['po_id']}
+                    <?py if is_forum_page: ?>
+                        <a class="r" href="/t/${forum}/${post['id']}?r=${reply['id']}">No.${reply['id']}</a>
+                    <?py else: ?>
+                        <a class="r" href="#">No.${reply['id']}</a>
+                    <?py #endif ?>
+                    <blockquote>#{reply['content'] or _('No Content')}</blockquote>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<?py #endfor ?>
+
+<br clear="left">

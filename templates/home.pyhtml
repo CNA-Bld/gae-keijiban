@@ -1,0 +1,7 @@
+<?py #@ARGS front_page ?>
+
+<div style="margin-top: 10px;">
+    <div style="text-align: center;">
+          #{front_page}
+    </div>
+</div>

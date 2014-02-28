@@ -1,0 +1,159 @@
+<?py #@ARGS form_action, foot_description, _ ?>
+
+<form action="${form_action}" enctype="multipart/form-data" method="post">
+    <hr width="90%" size="1">
+    <center>
+        <div>
+            <table cellpadding="1" cellspacing="1" style="text-align: left">
+                <tbody>
+                <tr>
+                    <td bgcolor="#eeaa88">
+                        <b>${{_('Name')}}</b>
+                    </td>
+                    <td>
+                        <input name="name" maxlength="20">
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#eeaa88">
+                        <b>${{_('Email')}}</b>
+                    </td>
+                    <td>
+                        <input name="email" maxlength="50">
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#eeaa88">
+                        <b>${{_('Title')}}</b>
+                    </td>
+                    <td>
+                        <input name="title" maxlength="20">&nbsp;<input type="submit" value="${{_('Submit')}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#eeaa88">
+                        <b>${{_('Emoticon')}}</b>
+                    </td>
+                    <td>
+                        <select name="emotion" id="emotion">
+                            <option value="" selected="selected">${{_('None')}}</option>
+                            <option value="|∀ﾟ">|∀ﾟ</option>
+                            <option value="(´ﾟДﾟ`)">(´ﾟДﾟ`)</option>
+                            <option value="(;´Д`)">(;´Д`)</option>
+                            <option value="(｀･ω･)">(｀･ω･)</option>
+                            <option value="(=ﾟωﾟ)=">(=ﾟωﾟ)=</option>
+                            <option value="| ω・´)">| ω・´)</option>
+                            <option value="|-` )">|-` )</option>
+                            <option value="|д` )">|д` )</option>
+                            <option value="|ー` )">|ー` )</option>
+                            <option value="|∀` )">|∀` )</option>
+                            <option value="(つд⊂)">(つд⊂)</option>
+                            <option value="(ﾟДﾟ≡ﾟДﾟ)">(ﾟДﾟ≡ﾟДﾟ)</option>
+                            <option value="(＾o＾)ﾉ">(＾o＾)ﾉ</option>
+                            <option value="(|||ﾟДﾟ)">(|||ﾟДﾟ)</option>
+                            <option value="( ﾟ∀ﾟ)">( ﾟ∀ﾟ)</option>
+                            <option value="( ´∀`)">( ´∀`)</option>
+                            <option value="(*´∀`)">(*´∀`)</option>
+                            <option value="(*ﾟ∇ﾟ)">(*ﾟ∇ﾟ)</option>
+                            <option value="(*ﾟーﾟ)">(*ﾟーﾟ)</option>
+                            <option value="(　ﾟ 3ﾟ)">(　ﾟ 3ﾟ)</option>
+                            <option value="( ´ー`)">( ´ー`)</option>
+                            <option value="( ・_ゝ・)">( ・_ゝ・)</option>
+                            <option value="( ´_ゝ`)">( ´_ゝ`)</option>
+                            <option value="(*´д`)">(*´д`)</option>
+                            <option value="(・ー・)">(・ー・)</option>
+                            <option value="(・∀・)">(・∀・)</option>
+                            <option value="(ゝ∀･)">(ゝ∀･)</option>
+                            <option value="(〃∀〃)">(〃∀〃)</option>
+                            <option value="(*ﾟ∀ﾟ*)">(*ﾟ∀ﾟ*)</option>
+                            <option value="( ﾟ∀。)">( ﾟ∀。)</option>
+                            <option value="( `д´)">( `д´)</option>
+                            <option value="(`ε´ )">(`ε´ )</option>
+                            <option value="(`ヮ´ )">(`ヮ´ )</option>
+                            <option value="σ`∀´)">σ`∀´)</option>
+                            <option value=" ﾟ∀ﾟ)σ"> ﾟ∀ﾟ)σ</option>
+                            <option value="ﾟ ∀ﾟ)ノ">ﾟ ∀ﾟ)ノ</option>
+                            <option value="(╬ﾟдﾟ)">(╬ﾟдﾟ)</option>
+                            <option value="(|||ﾟдﾟ)">(|||ﾟдﾟ)</option>
+                            <option value="( ﾟдﾟ)">( ﾟдﾟ)</option>
+                            <option value="Σ( ﾟдﾟ)">Σ( ﾟдﾟ)</option>
+                            <option value="( ;ﾟдﾟ)">( ;ﾟдﾟ)</option>
+                            <option value="( ;´д`)">( ;´д`)</option>
+                            <option value="(　д ) ﾟ ﾟ">(　д ) ﾟ ﾟ</option>
+                            <option value="( ☉д⊙)">( ☉д⊙)</option>
+                            <option value="(((　ﾟдﾟ)))">(((　ﾟдﾟ)))</option>
+                            <option value="( ` ・´)">( ` ・´)</option>
+                            <option value="( ´д`)">( ´д`)</option>
+                            <option value="( -д-)">( -д-)</option>
+                            <option value="(&gt;д&lt;)">(&gt;д&lt;)</option>
+                            <option value="･ﾟ( ﾉд`ﾟ)">･ﾟ( ﾉд`ﾟ)</option>
+                            <option value="( TдT)">( TдT)</option>
+                            <option value="(￣∇￣)">(￣∇￣)</option>
+                            <option value="(￣3￣)">(￣3￣)</option>
+                            <option value="(￣ｰ￣)">(￣ｰ￣)</option>
+                            <option value="(￣ . ￣)">(￣ . ￣)</option>
+                            <option value="(￣皿￣)">(￣皿￣)</option>
+                            <option value="(￣艸￣)">(￣艸￣)</option>
+                            <option value="(￣︿￣)">(￣︿￣)</option>
+                            <option value="(￣︶￣)">(￣︶￣)</option>
+                            <option value="ヾ(´ωﾟ｀)">ヾ(´ωﾟ｀)</option>
+                            <option value="(*´ω`*)">(*´ω`*)</option>
+                            <option value="(・ω・)">(・ω・)</option>
+                            <option value="( ´・ω)">( ´・ω)</option>
+                            <option value="(｀・ω)">(｀・ω)</option>
+                            <option value="(´・ω・`)">(´・ω・`)</option>
+                            <option value="(`・ω・´)">(`・ω・´)</option>
+                            <option value="( `_っ´)">( `_っ´)</option>
+                            <option value="( `ー´)">( `ー´)</option>
+                            <option value="( ´_っ`)">( ´_っ`)</option>
+                            <option value="( ´ρ`)">( ´ρ`)</option>
+                            <option value="( ﾟωﾟ)">( ﾟωﾟ)</option>
+                            <option value="(oﾟωﾟo)">(oﾟωﾟo)</option>
+                            <option value="(　^ω^)">(　^ω^)</option>
+                            <option value="(｡◕∀◕｡)">(｡◕∀◕｡)</option>
+                            <option value="/( ◕‿‿◕ )\">/( ◕‿‿◕ )\</option>
+                            <option value="ヾ(´ε`ヾ)">ヾ(´ε`ヾ)</option>
+                            <option value="(ノﾟ∀ﾟ)ノ">(ノﾟ∀ﾟ)ノ</option>
+                            <option value="(σﾟдﾟ)σ">(σﾟдﾟ)σ</option>
+                            <option value="(σﾟ∀ﾟ)σ">(σﾟ∀ﾟ)σ</option>
+                            <option value="|дﾟ )">|дﾟ )</option>
+                            <option value="┃電柱┃">┃電柱┃</option>
+                            <option value="ﾟ(つд`ﾟ)">ﾟ(つд`ﾟ)</option>
+                            <option value="ﾟÅﾟ )　">ﾟÅﾟ )　</option>
+                            <option value="⊂彡☆))д`)">⊂彡☆))д`)</option>
+                            <option value="⊂彡☆))д´)">⊂彡☆))д´)</option>
+                            <option value="⊂彡☆))∀`)">⊂彡☆))∀`)</option>
+                            <option value="(´∀((☆ミつ">(´∀((☆ミつ</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#eeaa88">
+                        <b>${{_('Content')}}</b>
+                    </td>
+                    <td>
+                        <textarea id="content" name="content" rows="2" cols="20"
+                                  style="height: 64px; width: 340px;"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#eeaa88">
+                        <b>${{_('Attachment')}}</b>
+                    </td>
+                    <td>
+                        !!!NOT IMPLEMENTED!!!
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <small>
+                            #{foot_description}
+                        </small>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </center>
+</form>
