@@ -22,6 +22,7 @@ import os
 import webapp2
 import urllib
 from google.appengine.ext import ndb
+from google.appengine.api import users
 
 import models
 import m17n
@@ -58,8 +59,15 @@ import settings
 site_settings = models.SiteSettings.get_site_settings()
 
 
+def is_admin():
+    if users.get_current_user() and users.is_current_user_admin():
+        return True
+    else:
+        return False
+
+
 def get_basic_context():
-    return {"site_title": site_settings.site_title, "forums": models.Forum.get_forums(),
+    return {"is_admin": is_admin(), "site_title": site_settings.site_title, "forums": models.Forum.get_forums(),
             "footer_info": site_settings.footer_info, "langs": m17n.create_lang_table(),
             "version_info": settings.VERSION_INFO + " / " + settings.FOOTER_ADDITIONAL_INFO}
 
@@ -151,11 +159,13 @@ class NewPostHandler(webapp2.RequestHandler):
     def post(self):
         user_key = check_user_key(self.request, self.response)
 
+        display_admin = is_admin() and self.request.get('display_admin') != ''
+
         new_post = models.Post(parent=models.Forum.get_forum_by_name(self.request.get('forum')).key,
                                title=self.request.get('title'), content=self.request.get('content'),
-                               po_name=self.request.get('name'), po_id=user_key,
+                               po_name=self.request.get('name'), po_id=(display_admin and users.get_current_user().nickname()) or user_key,
                                po_email=self.request.get('email'), po_ip=self.request.remote_addr, force_saged=False,
-                               locked=False, attached_img=None, is_reply=False, replies_count=0)
+                               locked=False, attached_img=None, is_reply=False, replies_count=0, is_admin=display_admin)
         if new_post.check_and_put():
             self.redirect('/f/' + urllib.quote(self.request.get('forum').encode('utf8')))
 
@@ -164,13 +174,15 @@ class NewReplyHandler(webapp2.RequestHandler):
     def post(self):
         user_key = check_user_key(self.request, self.response)
 
+        display_admin = is_admin() and self.request.get('display_admin') != ''
+
         new_post = models.Post(parent=models.Post.get_by_id(int(self.request.get('id')),
                                                             parent=models.Forum.get_forum_by_name(
                                                                 self.request.get('forum')).key).key,
                                title=self.request.get('title'), content=self.request.get('content'),
-                               po_name=self.request.get('name'), po_id=user_key,
+                               po_name=self.request.get('name'), po_id=(display_admin and users.get_current_user().nickname()) or user_key,
                                po_email=self.request.get('email'), po_ip=self.request.remote_addr, force_saged=False,
-                               locked=False, attached_img=None, is_reply=True, replies_count=0)
+                               locked=False, attached_img=None, is_reply=True, replies_count=0, is_admin=display_admin)
         if new_post.check_and_put():
             self.redirect('/t/' + urllib.quote(self.request.get('forum').encode('utf8')) + '/' + self.request.get('id'))
 
@@ -195,6 +207,10 @@ class AdminHandler(webapp2.RequestHandler):
             forum = models.Forum(parent=ndb.Key(urlsafe=self.request.get('category')), title=self.request.get('title'),
                                  order=int(self.request.get('order')), locked=False, posts_count=0)
             forum.put()
+        elif self.request.get('do') == 'set_display_name':
+            user_key = models.UserKey.generate_new_admin(self.request.get('name'))
+            self.response.set_cookie('display_id', user_key.display_id, max_age=2147483647)
+            self.response.set_cookie('private_key', user_key.private_key, max_age=2147483647)
         self.redirect('/admin/')
 
 

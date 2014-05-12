@@ -18,3 +18,7 @@
     </select>
     <input type="submit" value="Submit"/>
 </form>
+
+<form method="POST" action="/admin/?do=set_display_name">
+
+</form>

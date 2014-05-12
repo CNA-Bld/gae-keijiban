@@ -1,4 +1,4 @@
-<?py #@ARGS form_action, foot_description, _ ?>
+<?py #@ARGS form_action, foot_description, is_admin, _ ?>
 
 <form action="${form_action}" enctype="multipart/form-data" method="post">
     <hr width="90%" size="1">
@@ -12,6 +12,9 @@
                     </td>
                     <td>
                         <input name="name" maxlength="20">
+                        <?py if is_admin: ?>
+                            <input name="display_admin" type="checkbox"> ${{_('Display Admin ID')}}
+                        <?py #endif ?>
                     </td>
                 </tr>
                 <tr>

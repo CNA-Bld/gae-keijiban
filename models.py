@@ -123,6 +123,7 @@ class Post(ndb.Model):  # Ancestor: Forum (Po) or Post (Reply)
     display_date = ndb.DateTimeProperty(auto_now_add=True)
     replies_count = ndb.IntegerProperty(indexed=False)
     is_reply = ndb.BooleanProperty()
+    is_admin = ndb.BooleanProperty()
 
     def can_post(self):
         return (not self.locked) and (self.key.parent().get().can_post())
@@ -173,7 +174,7 @@ class Post(ndb.Model):  # Ancestor: Forum (Po) or Post (Reply)
     def to_dict(self):
         return {'attached_img': None, 'title': self.title, 'po_name': self.po_name, 'date': str(self.date),
                 'po_id': self.po_id, 'id': str(self.key.id()), 'force_saged': self.force_saged, 'locked': self.locked,
-                'content': self.content, 'po_ip': self.po_ip}
+                'content': self.content, 'po_ip': self.po_ip, 'is_admin': self.is_admin}
 
     @classmethod
     def query_posts_by_page(cls, ancestor_key, page=1, page_size=10):
@@ -188,6 +189,7 @@ class Post(ndb.Model):  # Ancestor: Forum (Po) or Post (Reply)
 class UserKey(ndb.Model):
     display_id = ndb.StringProperty()
     private_key = ndb.StringProperty()
+    is_admin = ndb.BooleanProperty(default=False)
     expiry_date = ndb.DateTimeProperty()
 
     @classmethod

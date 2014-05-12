@@ -1,4 +1,4 @@
-<?py #@ARGS post, admin, forum, is_forum_page,  _ ?>
+<?py #@ARGS post, is_admin, forum, is_forum_page,  _ ?>
 
 <hr>
 
@@ -7,7 +7,12 @@
 <?py #endif ?>
 <font color="#cc1105" size="+1"><b>${post['title'] or _('No Title')}</b></font>
 <font color="#117743"><b>${post['po_name'] or _('Anonymous')}</b></font>
-${post['date']} ID:${post['po_id']}
+${post['date']} ID:
+<?py if post['is_admin'] is True: ?>
+    <font color="#ff0000"> ${post['po_id']} </font>
+<?py else: ?>
+    ${post['po_id']}
+<?py #endif ?>
 <?py if is_forum_page: ?>
     <a class="r" href="/t/${forum}/${post['id']}?r=${post['id']}">No.${post['id']}</a>
     [<a href="/t/${forum}/${post['id']}">${{_('Reply')}}</a>]
@@ -40,7 +45,12 @@ ${post['date']} ID:${post['po_id']}
                     <?py #endif ?>
                     <font color="#cc1105" size="+1"><b>${reply['title'] or _('No Title')}</b></font>
                     <font color="#117743"><b>${reply['po_name'] or _('Anonymous')}</b></font>
-                    ${reply['date']} ID:${reply['po_id']}
+                    ${reply['date']} ID:
+                    <?py if reply['is_admin']: ?>
+                        <font color="#ff0000"> ${reply['po_id']} </font>
+                    <?py else: ?>
+                        ${reply['po_id']}
+                    <?py #endif ?>
                     <?py if is_forum_page: ?>
                         <a class="r" href="/t/${forum}/${post['id']}?r=${reply['id']}">No.${reply['id']}</a>
                     <?py else: ?>

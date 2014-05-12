@@ -43,6 +43,7 @@ MESSAGE_CATALOG = {
            'This post has been locked': 'This post has been locked',
            'This forum has been locked': 'This forum has been locked',
            'There are %d replies not displaying. Please click Reply link to view all replies.': 'There are %d replies not displaying. Please click Reply link to view all replies.',
+           'Display Admin ID': 'Display Admin ID',
            },
     'zh': {'_lang': '中文',
            'Admin': '管理',
@@ -70,7 +71,8 @@ MESSAGE_CATALOG = {
            'This post has been force SAGEd': '該串已被強制 SAGE',
            'This post has been locked': '該串已被鎖定',
            'This forum has been locked': '該版已被鎖定',
-           'There are %d replies not displaying. Please click Reply link to view all replies.': '回應有 %d 篇被省略。要閱讀所有回應請按下回應連結。'
+           'There are %d replies not displaying. Please click Reply link to view all replies.': '回應有 %d 篇被省略。要閱讀所有回應請按下回應連結。',
+           'Display Admin ID': '顯示管理員 ID（紅名）',
            },
 }
 
@@ -83,7 +85,5 @@ def create_m17n_func(lang):
 
 
 def create_lang_table():
-    lang_table = []
-    for lang in MESSAGE_CATALOG:
-        lang_table.append({'code': lang, 'name': MESSAGE_CATALOG[lang]['_lang']})
+    lang_table = [{'code': lang, 'name': MESSAGE_CATALOG[lang]['_lang']} for lang in MESSAGE_CATALOG]
     return lang_table

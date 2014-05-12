@@ -1,4 +1,4 @@
-<?py #@ARGS forum, forum_description, forum_locked, post, admin, page_number, max_page_number, _ ?>
+<?py #@ARGS forum, forum_description, forum_locked, post, page_number, max_page_number, is_admin, _ ?>
 
 
 <p align="right">
@@ -12,14 +12,13 @@
 <?py if forum_locked: ?>
     <div style="color: Red;">*${{_('This forum has been locked')}}</div>
 <?py else: ?>
-    <?py include('_form.pyhtml', form_action='/reply/?forum='+forum+'&id='+post['id'], foot_description=forum_description, _=_) ?>
+    <?py include('_form.pyhtml', form_action='/reply/?forum='+forum+'&id='+post['id'], foot_description=forum_description, is_admin=is_admin, _=_) ?>
 <?py #endif ?>
 
 <p></p>
 
 
-<?py include('_post.pyhtml', post=post, forum=forum, admin=admin, _=_) ?>
-
+<?py include('_post.pyhtml', post=post, forum=forum, is_admin=is_admin, _=_) ?>
 
 
 <table align="left" border="1">
