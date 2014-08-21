@@ -68,7 +68,7 @@
             <br/>
         </font>
 
-        <form action="" method="get">
+        <form action="/" method="get">
             <select name="lang" id="lang" onchange="this.form.submit()">
                 <option value="">Language</option>
                 <?py for lang in langs: ?>

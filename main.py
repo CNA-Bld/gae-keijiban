@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2014 CNA_Bld @ SSHZ.ORG
+# Copyright 2014 CNA_Bld & AngelaTang @ SSHZ.ORG
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -60,10 +60,7 @@ site_settings = models.SiteSettings.get_site_settings()
 
 
 def is_admin():
-    if users.get_current_user() and users.is_current_user_admin():
-        return True
-    else:
-        return False
+    return users.get_current_user() and users.is_current_user_admin()
 
 
 def get_basic_context():
@@ -82,7 +79,10 @@ def check_user_key(request, response):
 
 def m17n_process(request, response):
     lang = request.get('lang') or request.cookies.get('lang') or site_settings.default_language
-    response.set_cookie('lang', lang, max_age=2147483647)
+    if lang in m17n.MESSAGE_CATALOG:
+        response.set_cookie('lang', lang, max_age=2147483647)
+    else:
+        lang = site_settings.default_language
     return lang
 
 
@@ -112,11 +112,16 @@ class ForumHandler(webapp2.RequestHandler):
 
         forum = models.Forum.get_forum_by_name(forum_name)
 
+        if forum is None:
+            self.response.out.write('Forum not found.')
+            return  # TODO
+
         context['forum'] = forum.title
         context['forum_description'] = forum.forum_description
         context['forum_locked'] = forum.locked
         context['page_number'] = int(self.request.get('pn') or 1)
         context['max_page_number'] = (forum.posts_count - 1) / site_settings.default_page_size + 1
+        context['is_banned'] = models.BannedIP.is_banned(self.request.remote_addr)
 
         context['posts'] = forum.query_posts(context['page_number'], site_settings.default_page_size)
 
@@ -136,16 +141,29 @@ class ThreadHandler(webapp2.RequestHandler):
             post_id = urllib.unquote(self.request.url[self.request.url.rfind('/') + 1:self.request.url.rfind('?')])
         else:
             post_id = urllib.unquote(self.request.url[self.request.url.rfind('/') + 1:])
+        try:
+            post_id = int(post_id)
+        except ValueError:
+            self.response.out.write('Invalid thread ID.')
+            return  # TODO
         forum_name = urllib.unquote(self.request.url[self.request.url.find('/t/') + 3:self.request.url.rfind('/')])
 
         forum = models.Forum.get_forum_by_name(forum_name)
-        post = models.Post.get_by_id(int(post_id), parent=forum.key)
+        if forum is None:
+            self.response.out.write('Forum not found.')
+            return  # TODO
+
+        post = models.Post.get_by_id(post_id, parent=forum.key)
+        if post is None:
+            self.response.out.write('Thread not found.')
+            return  # TODO
 
         context['forum'] = forum.title
         context['forum_description'] = forum.forum_description
         context['forum_locked'] = forum.locked
         context['page_number'] = int(self.request.get('pn') or 1)
         context['max_page_number'] = (post.replies_count - 1) / site_settings.default_page_size + 1
+        context['is_banned'] = models.BannedIP.is_banned(self.request.remote_addr)
 
         context['post'] = post.to_dict_on_reply_page(context['page_number'], site_settings.default_page_size)
 
@@ -159,40 +177,106 @@ class NewPostHandler(webapp2.RequestHandler):
     def post(self):
         user_key = check_user_key(self.request, self.response)
 
+        if models.BannedIP.is_banned(self.request.remote_addr):
+            self.response.write("Banned.")  # TODO
+            return
+
         display_admin = is_admin() and self.request.get('display_admin') != ''
 
-        new_post = models.Post(parent=models.Forum.get_forum_by_name(self.request.get('forum')).key,
+        try:
+            forum = models.Forum.get_forum_by_name(self.request.get('forum')).key
+        except (AttributeError, IndexError):
+            logging.info("AttributeError: Possible Attack")
+            self.response.write("No such forum found.")  # TODO
+            return
+
+        new_post = models.Post(parent=forum,
                                title=self.request.get('title'), content=self.request.get('content'),
-                               po_name=self.request.get('name'), po_id=(display_admin and users.get_current_user().nickname()) or user_key,
+                               po_name=self.request.get('name'),
+                               po_id=(display_admin and models.AdminID.get_id(users.get_current_user())) or user_key,
                                po_email=self.request.get('email'), po_ip=self.request.remote_addr, force_saged=False,
                                locked=False, attached_img=None, is_reply=False, replies_count=0, is_admin=display_admin)
         if new_post.check_and_put():
             self.redirect('/f/' + urllib.quote(self.request.get('forum').encode('utf8')))
+        else:
+            logging.info("Not allowed to post: Possible Attack")  # TODO
+            self.response.write("Not allowed to post.")
 
 
 class NewReplyHandler(webapp2.RequestHandler):
     def post(self):
         user_key = check_user_key(self.request, self.response)
 
+        if models.BannedIP.is_banned(self.request.remote_addr):
+            self.response.write("Banned.")  # TODO
+            return
+
         display_admin = is_admin() and self.request.get('display_admin') != ''
 
-        new_post = models.Post(parent=models.Post.get_by_id(int(self.request.get('id')),
-                                                            parent=models.Forum.get_forum_by_name(
-                                                                self.request.get('forum')).key).key,
-                               title=self.request.get('title'), content=self.request.get('content'),
-                               po_name=self.request.get('name'), po_id=(display_admin and users.get_current_user().nickname()) or user_key,
+        try:
+            thread = models.Post.get_by_id(int(self.request.get('id')),
+                                           parent=models.Forum.get_forum_by_name(self.request.get('forum')).key).key
+        except ValueError:
+            self.response.write("Invalid thread ID.")
+            return  # TODO
+        except (AttributeError, IndexError):
+            logging.info("AttributeError: Possible Attack")  # TODO
+            self.response.write("No such forum/thread found.")
+            return
+
+        new_post = models.Post(parent=thread, title=self.request.get('title'), content=self.request.get('content'),
+                               po_name=self.request.get('name'),
+                               po_id=(display_admin and models.AdminID.get_id(users.get_current_user())) or user_key,
                                po_email=self.request.get('email'), po_ip=self.request.remote_addr, force_saged=False,
                                locked=False, attached_img=None, is_reply=True, replies_count=0, is_admin=display_admin)
+
         if new_post.check_and_put():
             self.redirect('/t/' + urllib.quote(self.request.get('forum').encode('utf8')) + '/' + self.request.get('id'))
+        else:
+            logging.info("Not allowed to post: Possible Attack")  # TODO
+            self.response.write("Not allowed to post.")
+
+
+class FrontendAdminHandler(webapp2.RequestHandler):
+    def get(self):
+        assert is_admin()
+
+        get_object_funcs = {'thread': models.Post.get_thread_by_key, 'post': models.Post.get_post_by_key,
+                            'forum': models.Forum.get_forum_by_name, 'ip': None}
+
+        if self.request.get('type') not in get_object_funcs:
+            self.response.write("Unrecognized object.")
+            return
+
+        try:
+            obj = get_object_funcs[self.request.get('type')](self.request.get('key'))
+        except TypeError:
+            self.response.write('Illegal action.')
+            return
+        except IndexError:
+            self.response.write('Object not found.')
+            return
+
+        actions = obj.get_actions()
+        if self.request.get('do') not in actions:
+            self.response.write('Illegal action.')
+            return
+
+        self.response.write(actions[self.request.get('do')]())
+
+        self.response.write("<script>history.go(-1);</script>")
 
 
 class AdminHandler(webapp2.RequestHandler):
     def get(self):
+        assert is_admin()
+
         user_key = check_user_key(self.request, self.response)
 
         context = get_basic_context()
         context["categories"] = models.ForumCategory.get_categories()
+        context["display_id"] = models.AdminID.get_id(users.get_current_user())
+        context["ban_ip"] = self.request.get("ban_ip")
 
         lang = m17n_process(self.request, self.response)
         context['_'] = m17n.create_m17n_func(lang)
@@ -200,6 +284,8 @@ class AdminHandler(webapp2.RequestHandler):
         self.response.out.write(html)
 
     def post(self):
+        assert is_admin()
+
         if self.request.get('do') == 'create_category':
             category = models.ForumCategory(name=self.request.get('name'), order=int(self.request.get('order')))
             category.put()
@@ -208,9 +294,12 @@ class AdminHandler(webapp2.RequestHandler):
                                  order=int(self.request.get('order')), locked=False, posts_count=0)
             forum.put()
         elif self.request.get('do') == 'set_display_name':
-            user_key = models.UserKey.generate_new_admin(self.request.get('name'))
-            self.response.set_cookie('display_id', user_key.display_id, max_age=2147483647)
-            self.response.set_cookie('private_key', user_key.private_key, max_age=2147483647)
+            models.AdminID.update_id(users.get_current_user(), self.request.get('name'))
+        elif self.request.get('do') == 'ban_ip':
+            if self.request.get('action_type') == '0':
+                models.BannedIP.unban(self.request.get('ip'))
+            elif self.request.get('action_type') == '1':
+                models.BannedIP.ban(self.request.get('ip'), int(self.request.get('duration')))
         self.redirect('/admin/')
 
 
@@ -220,5 +309,6 @@ app = webapp2.WSGIApplication([
                                   ("/t/.*", ThreadHandler),
                                   ("/post/.*", NewPostHandler),
                                   ("/reply/.*", NewReplyHandler),
+                                  ("/admin/frontend/.*", FrontendAdminHandler),
                                   ("/admin/.*", AdminHandler),
                               ], debug=is_dev)

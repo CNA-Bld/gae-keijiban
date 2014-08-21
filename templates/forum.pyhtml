@@ -1,8 +1,16 @@
-<?py #@ARGS forum, forum_description, forum_locked, posts, page_number, max_page_number, is_admin, _ ?>
+<?py #@ARGS forum, forum_description, forum_locked, posts, page_number, max_page_number, is_admin, is_banned, _ ?>
 
 
 <p align="right">
     [<a href="/f/${forum}">${{_('Forum Index')}}</a>]
+    <?py if is_admin: ?>
+        <?py if forum_locked: ?>
+            <a href="/admin/frontend/?type=forum&do=unlock&key=${forum}">${{_('Unlock Forum')}}</a>
+        <?py else: ?>
+            <a href="/admin/frontend/?type=forum&do=lock&key=${forum}">${{_('Lock Forum')}}</a>
+        <?py #endif ?>
+        <a href="/admin/frontend/?type=forum&do=delete&key=${forum}">${{_('Delete Forum')}}</a>
+    <?py #endif ?>
 </p>
 
 <p align="center">
@@ -12,7 +20,8 @@
 <?py if forum_locked: ?>
     <div style="color: Red;">*${{_('This forum has been locked')}}</div>
 <?py else: ?>
-    <?py include('_form.pyhtml', form_action='/post/?forum='+forum, foot_description=forum_description, is_admin=is_admin, _=_) ?>
+    <?py include('_form.pyhtml', form_action='/post/?forum='+forum, foot_description=forum_description, is_admin=is_admin, is_banned=is_banned, _=_) ?>
+    <p align="right" style="font-size: small">*${{_('Posting new thread on forum.')}}</p>
 <?py #endif ?>
 
 <p></p>

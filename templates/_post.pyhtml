@@ -13,6 +13,21 @@ ${post['date']} ID:
 <?py else: ?>
     ${post['po_id']}
 <?py #endif ?>
+<?py if is_admin is True: ?>
+    IP: ${post['po_ip']}
+    <?py if post['force_saged']: ?>
+        <a href="/admin/frontend/?type=thread&do=unsage&key=${post['ndb_key']}">${{_('UnSage')}}</a>
+    <?py else: ?>
+        <a href="/admin/frontend/?type=thread&do=sage&key=${post['ndb_key']}">${{_('Force Sage')}}</a>
+    <?py #endif ?>
+    <?py if post['locked']: ?>
+        <a href="/admin/frontend/?type=thread&do=unlock&key=${post['ndb_key']}">${{_('Unlock')}}</a>
+    <?py else: ?>
+        <a href="/admin/frontend/?type=thread&do=lock&key=${post['ndb_key']}">${{_('Lock')}}</a>
+    <?py #endif ?>
+    <a href="/admin/frontend/?type=post&do=delete&key=${post['ndb_key']}">${{_('Delete')}}</a>
+    <a href="/admin/?ban_ip=${post['po_ip']}">${{_('Ban IP')}}</a>
+<?py #endif ?>
 <?py if is_forum_page: ?>
     <a class="r" href="/t/${forum}/${post['id']}?r=${post['id']}">No.${post['id']}</a>
     [<a href="/t/${forum}/${post['id']}">${{_('Reply')}}</a>]
@@ -50,6 +65,11 @@ ${post['date']} ID:
                         <font color="#ff0000"> ${reply['po_id']} </font>
                     <?py else: ?>
                         ${reply['po_id']}
+                    <?py #endif ?>
+                    <?py if is_admin is True: ?>
+                        IP: ${reply['po_ip']}
+                        <a href="/admin/frontend/?type=post&do=delete&key=${reply['ndb_key']}">${{_('Delete')}}</a>
+                        <a href="/admin/?ban_ip=${post['po_ip']}">${{_('Ban IP')}}</a>
                     <?py #endif ?>
                     <?py if is_forum_page: ?>
                         <a class="r" href="/t/${forum}/${post['id']}?r=${reply['id']}">No.${reply['id']}</a>

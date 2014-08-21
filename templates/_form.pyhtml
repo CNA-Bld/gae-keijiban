@@ -1,4 +1,4 @@
-<?py #@ARGS form_action, foot_description, is_admin, _ ?>
+<?py #@ARGS form_action, foot_description, is_admin, is_banned, _ ?>
 
 <form action="${form_action}" enctype="multipart/form-data" method="post">
     <hr width="90%" size="1">
@@ -31,6 +31,9 @@
                     </td>
                     <td>
                         <input name="title" maxlength="20">&nbsp;<input type="submit" value="${{_('Submit')}}">
+                        <?py if is_banned: ?>
+                            *${{_('Your IP is now banned.')}}
+                        <?py #endif ?>
                     </td>
                 </tr>
                 <tr>

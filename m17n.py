@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2014 CNA_Bld @ SSHZ.ORG
+# Copyright 2014 CNA_Bld & AngelaTang @ SSHZ.ORG
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,12 +38,22 @@ MESSAGE_CATALOG = {
            'Index': 'Index',
            'Ban IP': 'Ban IP',
            'Sage': 'Sage',
+           'Force Sage': 'Force Sage',
+           'UnSage': 'UnSage',
            'Forum Index': 'Forum Index',
-           'This post has been force SAGEd': 'This post has been force SAGEd',
+           'Lock Forum': 'Lock Forum',
+           'Unlock Forum': 'Unlock Forum',
+           'Delete Forum': 'Delete Forum',
+           'This post has been force SAGEd': 'This post has been force SAGE\'d',
            'This post has been locked': 'This post has been locked',
            'This forum has been locked': 'This forum has been locked',
            'There are %d replies not displaying. Please click Reply link to view all replies.': 'There are %d replies not displaying. Please click Reply link to view all replies.',
            'Display Admin ID': 'Display Admin ID',
+           'Lock': 'Lock',
+           'Unlock': 'Unlock',
+           'Posting new thread on forum.': 'Posting new thread on forum.',
+           'Replying to thread.': 'Replying to thread.',
+           'Your IP is now banned.': 'Your IP is now banned.',
            },
     'zh': {'_lang': '中文',
            'Admin': '管理',
@@ -67,12 +77,22 @@ MESSAGE_CATALOG = {
            'Index': '首頁',
            'Ban IP': '封 IP',
            'Sage': 'Sage',
+           'Force Sage': '強制 Sage',
+           'UnSage': '解除 Sage',
            'Forum Index': '版塊首頁',
+           'Lock Forum': '鎖定板塊',
+           'Unlock Forum': '解鎖板塊',
+           'Delete Forum': '刪除板塊',
            'This post has been force SAGEd': '該串已被強制 SAGE',
            'This post has been locked': '該串已被鎖定',
            'This forum has been locked': '該版已被鎖定',
            'There are %d replies not displaying. Please click Reply link to view all replies.': '回應有 %d 篇被省略。要閱讀所有回應請按下回應連結。',
            'Display Admin ID': '顯示管理員 ID（紅名）',
+           'Lock': '鎖定',
+           'Unlock': '解鎖',
+           'Posting new thread on forum.': '正在發送新串。',
+           'Replying to thread.': '正在發送回應。',
+           'Your IP is now banned.': '你的 IP 已被封禁。'
            },
 }
 

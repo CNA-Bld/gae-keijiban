@@ -1,4 +1,4 @@
-<?py #@ARGS forum, forum_description, forum_locked, post, page_number, max_page_number, is_admin, _ ?>
+<?py #@ARGS forum, forum_description, forum_locked, post, page_number, max_page_number, is_admin, is_banned, _ ?>
 
 
 <p align="right">
@@ -11,8 +11,11 @@
 
 <?py if forum_locked: ?>
     <div style="color: Red;">*${{_('This forum has been locked')}}</div>
+<?py elif post['locked']: ?>
+    <div style="color: Red;">*${{_('This post has been locked')}}</div>
 <?py else: ?>
-    <?py include('_form.pyhtml', form_action='/reply/?forum='+forum+'&id='+post['id'], foot_description=forum_description, is_admin=is_admin, _=_) ?>
+    <?py include('_form.pyhtml', form_action='/reply/?forum='+forum+'&id='+post['id'], foot_description=forum_description, is_admin=is_admin, is_banned=is_banned, _=_) ?>
+    <p align="right" style="font-size: small">*${{_('Replying to thread.')}}</p>
 <?py #endif ?>
 
 <p></p>

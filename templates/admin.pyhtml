@@ -1,4 +1,4 @@
-<?py #@ARGS categories ?>
+<?py #@ARGS categories, display_id, ban_ip, _ ?>
 
 <form method="POST" action="/admin/?do=create_category">
     Create Category
@@ -20,5 +20,18 @@
 </form>
 
 <form method="POST" action="/admin/?do=set_display_name">
+    Set Display Name
+    Name: <input type="text" name="name" value="${display_id}"/>
+    <input type="submit" value="Submit"/>
+</form>
 
+<form method="POST" action="/admin/?do=ban_ip">
+    Ban IP
+    IP: <input type="text" name="ip" value="${ban_ip}"/>
+    Duration (Sec): <input type="text" name="duration" value="86400"/>
+    <select name="action_type" id="action_type">
+        <option value="1">Ban</option>
+        <option value="0">Unban</option>
+    </select>
+    <input type="submit" value="Submit"/>
 </form>
